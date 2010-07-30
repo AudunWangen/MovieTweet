@@ -220,35 +220,36 @@ function postToTwitter($username,$password,$message){
 } 
 
 
-
-
-
 //bit.ly account
-$bitly_account = 'bit.ly brukernavn';
-$bitly_key = 'bit.ly passord';
+$bitly_account = 'bit.ly username';
+$bitly_key = 'bit.ly key';
 
 //twitter account
-$twitter_account = 'twitter brukernavn';
-$twitter_password = 'twitter passord';
+$twitter_account = 'twitter username';
+$twitter_password = 'twitter password';
+
+//You will find the p_id of your cinema on http://www.dx.no/ebillett/
+$p_id = '206';
 
 //Todays date formated as yyyymmdd
 $today = date('Ymd');
 
 //Create URL
-//Erstatt p_id med id-en til din kino.
-//kino = JA, ALL or <blank> for hhv kinoforestillinger, begge eller kun teaterforestillinger
-//type = XML, 1 eller 2 for hhv XML, url-encoding eller string separert med pipe/stolpe
-$xmlsource = 'http://www.dx.no/ebillett/dx_forestillinger.php?p_id=206&kino=JA&fra_dato=' . $today . '&til_dato=' . $today . '&type=XML';
+//kino = JA, <blank> or ALL for movies, other performances or both respectively.
+//type = XML, 1 or 2 for XML, url encoding or strings separated with pipe respectively.
+$xmlsource = 'http://www.dx.no/ebillett/dx_forestillinger.php?p_id=' . $p_id . '&kino=JA&fra_dato=' . $today . '&til_dato=' . $today . '&type=XML';
 
 //Fetch content and store it in an array
 $contents = file_get_contents($xmlsource);
 $result = xml2array($contents,0);
-//print_r($result);
 
-foreach ($result[Showings][Show] as $show) {
-	$showURL = $show[URLabout];
-	$showTicket =  'http://' . $show[TicketURL];
-	$showMessage = $show[MovieTitle] . ' på kino i dag kl ' . $show[ShowTime] . ' ' . get_bitly_short_url($showURL,$bitly_account,$bitly_key) . 'Billetter: ' . get_bitly_short_url($showTicket,$bitly_account,$bitly_key);
-	postToTwitter($twitter_account,$twitter_password,$showMessage);
+//Posts movies to Twitter, if any.
+if ($result['Showings']['Show'][0]['MovieTitle']!='Ikke kino idag') {
+	foreach ($result['Showings']['Show'] as $show) {
+		$showURL = $show['URLabout'];
+		$showTicket =  'http://' . $show['TicketURL'];
+		$showMessage = $show['MovieTitle'] . ' på kino i dag kl ' . $show['ShowTime'] . ' ' . get_bitly_short_url($showURL,$bitly_account,$bitly_key) . 'Billetter: ' . get_bitly_short_url($showTicket,$bitly_account,$bitly_key);
+		postToTwitter($twitter_account,$twitter_password,$showMessage);
+	}
 }
 ?>

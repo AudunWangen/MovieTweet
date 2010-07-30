@@ -8,7 +8,7 @@ The script is built using functions from other scripts:
 
 * [xml2array](http://www.bin-co.com/php/scripts/xml2array/) - BSD license
 * [bit.ly API script](http://davidwalsh.name/bitly-api-php) - unknown license
-* [Twitter curl script](http://kosso.co.uk/twitter/twitterCurl.phps) - free to uuse as you want
+* [Twitter curl script](http://kosso.co.uk/twitter/twitterCurl.phps) - free to use as you want
 
 ## Required packages
 
@@ -18,7 +18,7 @@ The script is built using functions from other scripts:
 
 ## Installation
 
-Copy the script anywhere you like and change twitter username and password, bit.ly username and key and change p_id in the xmlsource-variable.
+Copy the script anywhere you like and change twitter username and password, bit.ly username and key and change p_id to the id of your cinema. See comments in the scripts for further information.
 
 Make sure the script is executable, and run it manually or make a daily cronjob/scheduled task.
 
